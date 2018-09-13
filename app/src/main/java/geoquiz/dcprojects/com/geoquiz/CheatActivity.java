@@ -15,15 +15,21 @@ public class CheatActivity extends AppCompatActivity {
             "com.dcproducts.android.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN =
             "com.dcproducts.android.geoquiz.answer_shown";
+    private static final String KEY_INDEX = "cheat_index";
 
     private boolean mIsAnswerTrue;
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
 
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
+
         init();
     }
 
