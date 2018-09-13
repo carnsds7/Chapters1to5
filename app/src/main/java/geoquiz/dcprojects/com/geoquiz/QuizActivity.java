@@ -85,7 +85,6 @@ public class QuizActivity extends AppCompatActivity {
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         updateQuestion();
         mTrueButton = (Button) findViewById(R.id.true_button);
-        //mTrueButton = (Button) findViewById(R.id.question_text_view);
         mFalseButton = (Button) findViewById(R.id.false_button);
         mNextButton = (ImageButton) findViewById(R.id.next_button);
         mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
