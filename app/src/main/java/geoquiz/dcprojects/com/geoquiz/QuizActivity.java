@@ -114,8 +114,9 @@ public class QuizActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //start cheat activity
-                Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+                //start cheat activity - explicit intent
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
                 startActivity(intent);
             }
         });
