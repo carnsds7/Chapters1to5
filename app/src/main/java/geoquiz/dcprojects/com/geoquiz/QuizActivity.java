@@ -14,6 +14,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -53,6 +54,62 @@ public class QuizActivity extends AppCompatActivity {
         init();
     }
 
+    // == init ==
+    private void init() {
+        mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        updateQuestion();
+        mTrueButton = (Button) findViewById(R.id.true_button);
+        mFalseButton = (Button) findViewById(R.id.false_button);
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mNextButton = (ImageButton) findViewById(R.id.next_button);
+        mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
+
+        initButtonFunctions();
+    }
+
+    private void initButtonFunctions() {
+        mTrueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAnswer(true);
+            }
+        });
+
+        mFalseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAnswer(false);
+            }
+        });
+
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //start cheat activity - explicit intent
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivityForResult(intent, REQUEST_CODE_CHEAT);
+            }
+        });
+
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length < 0 ?
+                        (mQuestionBank.length - 1) % mQuestionBank.length : (mCurrentIndex - 1) % mQuestionBank.length;
+                updateQuestion();
+            }
+        });
+
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateQuestion();
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -81,63 +138,6 @@ public class QuizActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy() called");
-    }
-
-    private void init() {
-        mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
-        updateQuestion();
-        mTrueButton = (Button) findViewById(R.id.true_button);
-        mFalseButton = (Button) findViewById(R.id.false_button);
-        mCheatButton = (Button) findViewById(R.id.cheat_button);
-        mNextButton = (ImageButton) findViewById(R.id.next_button);
-        mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
-
-
-        initButtonFunctions();
-    }
-
-    private void initButtonFunctions() {
-        mTrueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer(true);
-            }
-        });
-
-        mFalseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer(false);
-            }
-        });
-
-        mCheatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //start cheat activity - explicit intent
-                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
-                startActivity(intent);
-            }
-        });
-
-        mPreviousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length < 0 ?
-                        (mQuestionBank.length - 1) % mQuestionBank.length : (mCurrentIndex - 1) % mQuestionBank.length;
-                updateQuestion();
-            }
-        });
-
-        mNextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updateQuestion();
-                }
-        });
-
     }
 
     private void updateQuestion() {
